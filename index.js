@@ -6,29 +6,54 @@
  */
 
 // Given Parameters
-const vel = 10000; // velocity (km/h)
-const acc = 3; // acceleration (m/s^2)
+let velocityInKmHour = 10000; // velocity (km/h)
+const accelerationInKm = 3 ; // acceleration (m/s^2)
 const time = 3600; // seconds (1 hour)
-const d = 0; // distance (km)
-const fuel = 5000; // remaining fuel (kg)
-const fbr = 0.5; // fuel burn rate (kg/s)
+const initialDistanceInKm = 0; // distance (km)
+const fuelInKg = 5000; // remaining fuel (kg)
+const fuelBurnRate = 0.5; // fuel burn rate (kg/s)
 
+// const accelerationInKm = accelerationInSec * 3.6;
+// const timeInHour = timeInSec / 3600;
 
-const d2 = d + (vel*time) //calcultes new distance
-const rf = fbr*time //calculates remaining fuel
-const vel2 = calcNewVel(acc, vel, time) //calculates new velocity based on acceleration
+const newDistance = calcNewDistance(initialDistanceInKm ,velocityInKmHour,time)  //calcultes new distance
+const RemainingFuel = calcRemainingFuel(fuelInKg ,fuelBurnRate ,time) //calculates remaining fuel
+const newVelocity = calcNewVelocity(accelerationInKm, velocityInKmHour , time ) //calculates new velocity based on acceleration
 
 // Pick up an error with how the function below is called and make it robust to such errors
-calcNewVel = (vel, acc, time) => { 
-  return vel + (acc*time)
+function calcNewVelocity(acceleration, velocity, time) { 
+    //check if the is a number or not
+    if(typeof acceleration !== 'number' || typeof velocity !== 'number' || typeof time !== 'number'){
+      throw Error("Must be numerical Values, with correct units(Km/h)");
+    }
+    return velocity + ((acceleration * 3.6) * time )
+}
+// CALC NEW DISTANCE TRAVELED
+function calcNewDistance(distance, velocity, time) {
+
+  if (typeof distance !== 'number' || typeof velocity !== 'number' || typeof time !== 'number') {
+    throw Error("Must be numerical values , with correct units(km)")
+  }
+  return distance + (velocity * (time / 3600))
+
+}
+//CHECKING FOR REMAINING FUEL
+function calcRemainingFuel(fuel, fuelRate, time) {
+  if(typeof fuel !== 'number' || typeof fuelRate !== 'number' || typeof time !== 'number') {
+    throw Error("Must be numerical values , with correct units(kg)")
+  }
+  return fuel - fuelRate * time
+
 }
 
-console.log(`Corrected New Velocity: ${vel2} km/h`);
-console.log(`Corrected New Distance: ${d2} km`);
-console.log(`Corrected Remaining Fuel: ${rf} kg`);
+console.log(`Corrected New Velocity: ${newVelocity} km/h`);
+console.log(`Corrected New Distance: ${newDistance} km`);
+console.log(`Corrected Remaining Fuel: ${RemainingFuel} kg`);
 
 
-
+// - **New Velocity**: Approximately 48880 km/h after correction.
+// - **New Distance**: Approximately 10000 km after correction.
+// - **Remaining Fuel**: Approximately 3,200 kg after correction.
 
 
 
